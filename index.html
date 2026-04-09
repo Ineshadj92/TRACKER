@@ -40,7 +40,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Grid background */
   body::before {
     content: '';
     position: fixed;
@@ -54,7 +53,6 @@
     z-index: 0;
   }
 
-  /* ── HEADER ── */
   .header {
     position: sticky;
     top: 0;
@@ -80,6 +78,16 @@
     text-shadow: 0 0 20px #ffc84066;
   }
 
+  .day-counter {
+    font-family: 'Black Ops One', cursive;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+  .day-counter span {
+    color: var(--gold);
+  }
+
   .autosave-badge {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
@@ -102,7 +110,13 @@
     100% { opacity: 0; }
   }
 
-  /* ── STATS ── */
+  .header-row2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
   .stats-scroll {
     display: flex;
     gap: 10px;
@@ -139,16 +153,14 @@
   .stat-value.red   { color: var(--red); text-shadow: 0 0 10px #ff224455; }
   .stat-value.white { color: var(--text-bright); }
 
-  /* ── COL HEADERS ── */
   .col-headers {
     position: sticky;
-    top: var(--header-h, 120px);
+    top: var(--header-h, 130px);
     z-index: 99;
     background: var(--bg2);
     border-bottom: 2px solid var(--gold);
     display: grid;
     grid-template-columns: 90px repeat(5, 1fr) 70px;
-    gap: 0;
   }
   .col-h {
     padding: 7px 4px;
@@ -162,13 +174,11 @@
   }
   .col-h:last-child { border-right: none; }
 
-  /* ── GRID ── */
   .grid-wrap { position: relative; z-index: 1; }
 
   .week-separator {
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--week-sep), var(--gold), var(--week-sep), transparent);
-    margin: 0;
   }
 
   .day-row {
@@ -178,12 +188,11 @@
     transition: background 0.2s;
   }
   .day-row:hover { background: #ffffff04; }
-
   .day-row.today {
     background: linear-gradient(90deg, #ffc84008, transparent);
   }
+  .day-row.past { opacity: 0.7; }
 
-  /* Day label cell */
   .day-label {
     padding: 10px 8px;
     display: flex;
@@ -217,8 +226,13 @@
     display: inline-block;
     margin-top: 2px;
   }
+  .day-index {
+    font-size: 9px;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
 
-  /* Toggle cell */
   .toggle-cell {
     display: flex;
     align-items: center;
@@ -233,12 +247,8 @@
   }
   .toggle-cell:last-child { border-right: none; }
   .toggle-cell.state-0 { background: transparent; }
-  .toggle-cell.state-1 {
-    background: var(--green-dim);
-  }
-  .toggle-cell.state-2 {
-    background: var(--red-dim);
-  }
+  .toggle-cell.state-1 { background: var(--green-dim); }
+  .toggle-cell.state-2 { background: var(--red-dim); }
 
   .toggle-icon {
     font-size: 18px;
@@ -258,7 +268,6 @@
     animation: pop 0.3s cubic-bezier(.34,1.56,.64,1) forwards;
   }
 
-  /* Ripple */
   .ripple {
     position: absolute;
     border-radius: 50%;
@@ -270,7 +279,6 @@
     to { transform: scale(4); opacity: 0; }
   }
 
-  /* Weight cell */
   .weight-cell {
     display: flex;
     align-items: center;
@@ -288,12 +296,8 @@
     text-shadow: 0 0 8px #ffc84055;
     letter-spacing: 0.5px;
   }
-  .weight-empty {
-    font-size: 20px;
-    opacity: 0.15;
-  }
+  .weight-empty { font-size: 20px; opacity: 0.15; }
 
-  /* ── MODAL ── */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -306,10 +310,7 @@
     pointer-events: none;
     transition: opacity 0.25s;
   }
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
 
   .modal {
     width: 100%;
@@ -320,9 +321,7 @@
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(.34,1.1,.64,1);
   }
-  .modal-overlay.open .modal {
-    transform: translateY(0);
-  }
+  .modal-overlay.open .modal { transform: translateY(0); }
 
   .modal-title {
     font-family: 'Black Ops One', cursive;
@@ -393,22 +392,44 @@
   .btn-cancel { background: var(--bg3); color: var(--red); border: 1px solid var(--red-dim); }
   .btn-save   { background: var(--gold); color: var(--bg); }
 
-  /* ── SAFE AREA PADDING ── */
   .bottom-pad { height: env(safe-area-inset-bottom, 20px); }
+
+  /* Scroll to today button */
+  .today-btn {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+    z-index: 150;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Black Ops One', cursive;
+    font-size: 11px;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px #ffc84055;
+    transition: transform 0.15s;
+  }
+  .today-btn:active { transform: scale(0.95); }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header" id="mainHeader">
   <div class="header-top">
-    <div class="title">⚡ SÈCHE</div>
-    <div class="autosave-badge" id="autosaveBadge">AUTO-SAVE</div>
+    <div>
+      <div class="title">⚡ SÈCHE</div>
+      <div class="day-counter">JOUR <span id="dayCount">1</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+      <div class="autosave-badge" id="autosaveBadge">AUTO-SAVE</div>
+    </div>
   </div>
   <div class="stats-scroll" id="statsBar"></div>
 </div>
 
-<!-- COL HEADERS -->
 <div class="col-headers" id="colHeaders">
   <div class="col-h">Jour</div>
   <div class="col-h">Séance</div>
@@ -419,10 +440,10 @@
   <div class="col-h">Poids</div>
 </div>
 
-<!-- GRID -->
 <div class="grid-wrap" id="gridWrap"></div>
 
-<!-- MODAL -->
+<button class="today-btn" id="todayBtn">⚡ TODAY</button>
+
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-title">⚖️ POIDS DU JOUR</div>
@@ -443,17 +464,27 @@
 
 <script>
 const STORAGE_KEY = 'seche_tracker_v1';
+const START_KEY = 'seche_start_date_v1';
 const COLS = ['seance', 'cardio', 'calories', 'pas', 'macros'];
 const COL_ICONS = { seance:'🏋️', cardio:'🏃', calories:'🔥', pas:'👣', macros:'🥩' };
 const DAYS_FR = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
 
-// State
 let data = {};
 let modalDayKey = null;
 
-function getKey(date) {
-  return date.toISOString().slice(0, 10);
+// Start date: stored once, never changes
+function getStartDate() {
+  let stored = localStorage.getItem(START_KEY);
+  if (!stored) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    stored = today.toISOString().slice(0,10);
+    localStorage.setItem(START_KEY, stored);
+  }
+  return new Date(stored + 'T00:00:00');
 }
+
+function getKey(date) { return date.toISOString().slice(0,10); }
 
 function load() {
   try { data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
@@ -473,15 +504,16 @@ function flashSave() {
   b.addEventListener('animationend', () => b.classList.remove('blink'), { once: true });
 }
 
-// Build 30 days
+// All days from start to today + 30
 function getDays() {
+  const start = getStartDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const end = new Date(today); end.setDate(today.getDate() + 30);
   const days = [];
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    days.push(d);
+  const cur = new Date(start);
+  while (cur <= end) {
+    days.push(new Date(cur));
+    cur.setDate(cur.getDate() + 1);
   }
   return days;
 }
@@ -490,7 +522,6 @@ function ensureDay(key) {
   if (!data[key]) data[key] = { seance:0, cardio:0, calories:0, pas:0, macros:0, poids:null };
 }
 
-// Ripple effect
 function addRipple(el, e) {
   const r = document.createElement('span');
   r.classList.add('ripple');
@@ -499,8 +530,8 @@ function addRipple(el, e) {
   const x = (e.changedTouches ? e.changedTouches[0].clientX : e.clientX) - rect.left - size/2;
   const y = (e.changedTouches ? e.changedTouches[0].clientY : e.clientY) - rect.top - size/2;
   r.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
-  const state = parseInt(el.dataset.state || 0);
-  r.style.background = state === 1 ? '#00ff8844' : state === 2 ? '#ff224444' : '#ffffff22';
+  const st = parseInt(el.dataset.state || 0);
+  r.style.background = st === 1 ? '#00ff8844' : st === 2 ? '#ff224444' : '#ffffff22';
   el.appendChild(r);
   setTimeout(() => r.remove(), 500);
 }
@@ -510,37 +541,44 @@ function renderGrid() {
   wrap.innerHTML = '';
   const days = getDays();
   const todayKey = getKey(new Date());
+  const startDate = getStartDate();
+
+  // Day counter
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diffMs = today - startDate;
+  const dayNum = Math.floor(diffMs / 86400000) + 1;
+  document.getElementById('dayCount').textContent = dayNum;
 
   days.forEach((d, i) => {
     const key = getKey(d);
     ensureDay(key);
     const dayData = data[key];
     const isToday = key === todayKey;
+    const isPast = d < today;
     const dayOfWeek = d.getDay();
+    const dayIndex = Math.floor((d - startDate) / 86400000) + 1;
 
-    // Week separator (before day that starts a new week, except day 0)
+    // Week separator
     if (i > 0 && dayOfWeek === 1) {
       const sep = document.createElement('div');
       sep.className = 'week-separator';
       wrap.appendChild(sep);
     }
 
-    // Row
     const row = document.createElement('div');
-    row.className = 'day-row' + (isToday ? ' today' : '');
+    row.className = 'day-row' + (isToday ? ' today' : '') + (isPast && !isToday ? ' past' : '');
     row.dataset.key = key;
+    if (isToday) row.id = 'today-row';
 
-    // Day label
     const label = document.createElement('div');
     label.className = 'day-label';
     label.innerHTML = `
       <div class="day-num">${d.getDate()}</div>
       <div class="day-name">${DAYS_FR[dayOfWeek]} ${d.toLocaleDateString('fr',{month:'short'})}</div>
-      ${isToday ? '<div class="today-badge">TODAY</div>' : ''}
+      ${isToday ? '<div class="today-badge">TODAY</div>' : `<div class="day-index">J${dayIndex}</div>`}
     `;
     row.appendChild(label);
 
-    // Toggle cols
     COLS.forEach(col => {
       const cell = document.createElement('div');
       const st = dayData[col] || 0;
@@ -553,17 +591,14 @@ function renderGrid() {
       row.appendChild(cell);
     });
 
-    // Weight cell
     const wcell = document.createElement('div');
     wcell.className = 'weight-cell';
     wcell.dataset.key = key;
     wcell.dataset.date = d.toLocaleDateString('fr', { weekday:'long', day:'numeric', month:'long' });
     const poids = dayData.poids;
-    if (poids !== null && poids !== undefined) {
-      wcell.innerHTML = `<span class="weight-val">${parseFloat(poids).toFixed(1)}</span>`;
-    } else {
-      wcell.innerHTML = `<span class="weight-empty">⚖️</span>`;
-    }
+    wcell.innerHTML = (poids !== null && poids !== undefined)
+      ? `<span class="weight-val">${parseFloat(poids).toFixed(1)}</span>`
+      : `<span class="weight-empty">⚖️</span>`;
     wcell.addEventListener('click', handleWeightTap);
     row.appendChild(wcell);
 
@@ -578,12 +613,10 @@ function handleToggle(e) {
   let st = parseInt(cell.dataset.state || 0);
   st = (st + 1) % 3;
 
-  // Pop animation
   cell.classList.remove('popping');
   void cell.offsetWidth;
   cell.classList.add('popping');
   cell.addEventListener('animationend', () => cell.classList.remove('popping'), { once: true });
-
   addRipple(cell, e);
 
   cell.classList.remove('state-0','state-1','state-2');
@@ -645,11 +678,9 @@ function refreshWeightCell(key) {
   if (!row) return;
   const wcell = row.querySelector('.weight-cell');
   const poids = data[key]?.poids;
-  if (poids !== null && poids !== undefined) {
-    wcell.innerHTML = `<span class="weight-val">${parseFloat(poids).toFixed(1)}</span>`;
-  } else {
-    wcell.innerHTML = `<span class="weight-empty">⚖️</span>`;
-  }
+  wcell.innerHTML = (poids !== null && poids !== undefined)
+    ? `<span class="weight-val">${parseFloat(poids).toFixed(1)}</span>`
+    : `<span class="weight-empty">⚖️</span>`;
 }
 
 function updateStats() {
@@ -657,11 +688,9 @@ function updateStats() {
   const todayKey = getKey(new Date());
   const todayData = data[todayKey] || {};
 
-  // Score du jour
   let todayScore = 0;
   COLS.forEach(c => { if ((todayData[c] || 0) === 1) todayScore++; });
 
-  // Global success rate
   let totalCells = 0, doneCells = 0;
   days.forEach(d => {
     const key = getKey(d);
@@ -674,31 +703,29 @@ function updateStats() {
   });
   const rate = totalCells > 0 ? Math.round((doneCells / totalCells) * 100) : 0;
 
-  // Perfect days (5/5)
   let perfectDays = 0;
   days.forEach(d => {
     const key = getKey(d);
     const dd = data[key] || {};
-    const score = COLS.filter(c => (dd[c] || 0) === 1).length;
-    if (score === 5) perfectDays++;
+    if (COLS.filter(c => (dd[c] || 0) === 1).length === 5) perfectDays++;
   });
 
-  // Weight evolution: find two most recent non-null weights
-  const weights = days.map(d => data[getKey(d)]?.poids).filter(v => v !== null && v !== undefined);
+  // Weight: first vs latest
+  const allWeights = days.map(d => ({ key: getKey(d), v: data[getKey(d)]?.poids }))
+    .filter(x => x.v !== null && x.v !== undefined);
   let weightDisplay = '—';
   let weightClass = 'white';
-  if (weights.length >= 2) {
-    const diff = weights[weights.length-1] - weights[weights.length-2];
+  if (allWeights.length >= 2) {
+    const diff = allWeights[allWeights.length-1].v - allWeights[0].v;
     const sign = diff < 0 ? '↓' : diff > 0 ? '↑' : '=';
     weightDisplay = `${sign}${Math.abs(diff).toFixed(1)}`;
     weightClass = diff < 0 ? 'green' : diff > 0 ? 'red' : 'white';
-  } else if (weights.length === 1) {
-    weightDisplay = `${weights[0]}kg`;
+  } else if (allWeights.length === 1) {
+    weightDisplay = `${allWeights[0].v}kg`;
     weightClass = 'gold';
   }
 
-  const bar = document.getElementById('statsBar');
-  bar.innerHTML = `
+  document.getElementById('statsBar').innerHTML = `
     <div class="stat-card">
       <div class="stat-label">Score Jour</div>
       <div class="stat-value gold">${todayScore}/5</div>
@@ -709,7 +736,7 @@ function updateStats() {
     </div>
     <div class="stat-card">
       <div class="stat-label">Parfaits</div>
-      <div class="stat-value gold">${perfectDays}</div>
+      <div class="stat-value gold">${perfectDays}j</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Poids Δ</div>
@@ -718,18 +745,28 @@ function updateStats() {
   `;
 }
 
-// Sticky header height for col headers
 function setStickyOffset() {
   const h = document.getElementById('mainHeader').offsetHeight;
   document.getElementById('colHeaders').style.top = h + 'px';
 }
 
-// Init
+// Scroll to today
+document.getElementById('todayBtn').addEventListener('click', () => {
+  const el = document.getElementById('today-row');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
 load();
 renderGrid();
 updateStats();
 setStickyOffset();
 window.addEventListener('resize', setStickyOffset);
+
+// Auto-scroll to today on load
+setTimeout(() => {
+  const el = document.getElementById('today-row');
+  if (el) el.scrollIntoView({ block: 'center' });
+}, 100);
 </script>
 </body>
 </html>
